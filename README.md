@@ -27,6 +27,7 @@ elsewhere.
 $ env OWM_TOKEN=... wetter [-i] \
     [-l <integer | city,ISO3166 CountryCode>]
 
+$ wetter -l vienna,at
 
 Your nearest weather is Vienna,AT is:
 
@@ -36,6 +37,5 @@ overcast with clouds
 
 Geo coords [48.2085, 16.3721]
 
-$ wetter -l 2761369
-$ wetter -i -l vienna,at
+$ wetter -i -l 2761369
 ```
