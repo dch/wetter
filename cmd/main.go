@@ -12,14 +12,7 @@ import (
 var owmApiBaseURI = "https://api.openweathermap.org"
 var owmLocation = "vienna,at"
 
-type OwmResponse struct {
-	Weather []struct {
-		Main string
-	}
-	Main struct {
-		Kelvin float64 `json:"temp"`
-	}
-}
+
 
 func main() {
 	// retrieve API token, bail if not present
