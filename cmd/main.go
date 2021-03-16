@@ -3,8 +3,6 @@ package main
 
 import (
 	"fmt"
-	/* "net/http" */
-	/* "net/url" */
 	"os"
 	"wetter"
 )
@@ -20,7 +18,13 @@ func main() {
 	}
 	fmt.Println("Wetter API token:", owmApiToken)
 
-	conditions, err := wetter.Weather(owmApiToken, owmLocation)
+	location := owmLocation
+
+	if len(os.Args) == 2 {
+		location = os.Args[1]
+	}
+
+	conditions, err := wetter.Weather(owmApiToken, location)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: OpenWeatherMap API response was unparseable: %v\n", err)
 		os.Exit(1)
