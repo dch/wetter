@@ -2,14 +2,30 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"wetter"
 )
 
-const owmLocation = "vienna,at"
+const defaultLocation = "vienna,at"
+
+// the default is, surprisingly, Celsius, and not Kelvin
+var useFahrenheit bool
+var owmLocation string
 
 func main() {
+
+	flag.BoolVar(&useFahrenheit, "f", false, "sets display temperature in degrees Fahrenheit (default is Celcius)")
+	flag.StringVar(&owmLocation, "l", defaultLocation, "specify a city or location to query temperature")
+	flag.Parse()
+
+	if useFahrenheit {
+		fmt.Println("We are using Fahrenheit, mein Herr")
+	} else {
+		fmt.Println("We are using Celsius, my Lord")
+	}
+
 	// retrieve API token, bail if not present
 	owmApiToken, ok := os.LookupEnv("OWM_TOKEN")
 	if !ok {

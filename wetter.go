@@ -10,8 +10,8 @@ import (
 const owmApiBaseURI = "https://api.openweathermap.org"
 
 type Conditions struct {
-	Summary               string
-	TemperatureCentigrade float64
+	Summary           string
+	TemperatureKelvin float64
 }
 
 type Client struct {
@@ -33,6 +33,19 @@ type owmResponse struct {
 	}
 }
 
+func (c Conditions) String(useFahrenheit bool) string {
+
+	celsius := c.TemperatureKelvin - 273.15
+	temperature := ""
+
+	if useFahrenheit {
+		temperature = fmt.Sprintf("%0.2f °F", celsius*9/5+32)
+	} else {
+		temperature = fmt.Sprintf("%0.2f °C", celsius)
+	}
+
+	return c.Summary + ", " + temperature
+}
 func Weather(owmApiToken string, owmLocation string) (Conditions, error) {
 	c := NewClient(owmApiToken)
 	
