@@ -60,14 +60,14 @@ func GetWeather(owmApiToken string, owmLocation string, useFahrenheit bool) (str
 func Weather(owmApiToken string, owmLocation string) (Conditions, error) {
 	c := NewClient(owmApiToken)
 
-	conditions, err := c.getOwmWeather(owmLocation)
+	conditions, err := c.GetOwmWeather(owmLocation)
 	if err != nil {
 		return Conditions{}, err
 	}
 	return conditions, nil
 }
 
-func (c *Client) getOwmWeather(owmLocation string) (Conditions, error) {
+func (c *Client) GetOwmWeather(owmLocation string) (Conditions, error) {
 	owmApiURI := fmt.Sprintf("%s/data/2.5/weather?appid=%s&q=%s",
 		owmApiBaseURI,
 		c.APIKey,

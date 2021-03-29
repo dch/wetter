@@ -33,3 +33,14 @@ func TestGet(t *testing.T) {
 		t.Error("want non-empty response")
 	}
 }
+
+func TestTemperatureRanges(t *testing.T) {
+	APIKey, _ := os.LookupEnv("OWM_TOKEN")
+	c := wetter.NewClient(APIKey)
+
+	_, err := c.GetOwmWeather("Vienna,AT")
+	if err != nil {
+		t.Errorf("wanted error-free response, got %v", err)
+	}
+	// return conditions, nil
+}
