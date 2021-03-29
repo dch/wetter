@@ -1,16 +1,22 @@
 package wetter_test
 
 import (
+	"log"
 	"os"
 	"testing"
 	"wetter"
 )
 
-func TestNewClient(t *testing.T) {
-	APIKey, ok := os.LookupEnv("OWM_TOKEN")
+func TestMain(m *testing.M) {
+	_, ok := os.LookupEnv("OWM_TOKEN")
 	if !ok {
-		t.Error("error: you need to provide an OpenWeatherMap API token")
+		log.Fatalf("error: you need to provide an OpenWeatherMap API token")
 	}
+	os.Exit(m.Run())
+}
+
+func TestNewClient(t *testing.T) {
+	APIKey, _ := os.LookupEnv("OWM_TOKEN")
 	client := wetter.NewClient(APIKey)
 	if client.APIKey != APIKey {
 		t.Error("want client.APIKey to be set")
@@ -18,10 +24,7 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	APIKey, ok := os.LookupEnv("OWM_TOKEN")
-	if !ok {
-		t.Error("error: you need to provide an OpenWeatherMap API token")
-	}
+	APIKey, _ := os.LookupEnv("OWM_TOKEN")
 	w, err := wetter.GetWeather(APIKey, "Vienna,AT", false)
 	if err != nil {
 		t.Fatal(err)
