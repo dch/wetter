@@ -38,9 +38,11 @@ func TestTemperatureRanges(t *testing.T) {
 	APIKey, _ := os.LookupEnv("OWM_TOKEN")
 	c := wetter.NewClient(APIKey)
 
-	_, err := c.GetOwmWeather("Vienna,AT")
+	conditions, err := c.GetOwmWeather("Vienna,AT")
 	if err != nil {
 		t.Errorf("wanted error-free response, got %v", err)
 	}
-	// return conditions, nil
+	if conditions.TemperatureKelvin < 250 || conditions.TemperatureKelvin > 320 {
+		t.Errorf("wanted temperature between 250K and 320K (approx -20°C to +50°C), got %v", conditions)
+	}
 }
