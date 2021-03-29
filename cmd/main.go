@@ -34,16 +34,10 @@ func main() {
 	}
 	fmt.Println("Wetter API token:", owmApiToken)
 
-	location := owmLocation
-
-	if len(os.Args) == 2 {
-		location = os.Args[1]
-	}
-
-	conditions, err := wetter.Weather(owmApiToken, location)
+	conditions, err := wetter.GetWeather(owmApiToken, owmLocation, useFahrenheit)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: OpenWeatherMap API response was unparseable: %v\n", err)
+		fmt.Fprintf(os.Stderr, "error: OpenWeatherMap API response was inconceivable! %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Printf("%+#v\n", conditions)
+	fmt.Printf("%s: %s\n", owmLocation, conditions)
 }

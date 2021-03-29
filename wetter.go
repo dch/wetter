@@ -46,9 +46,20 @@ func (c Conditions) String(useFahrenheit bool) string {
 
 	return c.Summary + ", " + temperature
 }
+
+func GetWeather(owmApiToken string, owmLocation string, useFahrenheit bool) (string, error) {
+
+	conditions, err := Weather(owmApiToken, owmLocation)
+	if err != nil {
+		return "", err
+	}
+
+	return conditions.String(useFahrenheit), nil
+}
+
 func Weather(owmApiToken string, owmLocation string) (Conditions, error) {
 	c := NewClient(owmApiToken)
-	
+
 	conditions, err := c.getOwmWeather(owmLocation)
 	if err != nil {
 		return Conditions{}, err
@@ -97,12 +108,12 @@ func (c *Client) getOwmWeather(owmLocation string) (Conditions, error) {
 	if err != nil {
 		return Conditions{}, fmt.Errorf("OpenWeatherMap API response was unparseable: %v\n", err)
 	}
-		if len(response.Weather) < 1 {
+	if len(response.Weather) < 1 {
 		return Conditions{}, fmt.Errorf("weather array was empty: %+v", response)
 	}
 
 	return Conditions{
-		Summary:               response.Weather[0].Main,
-		TemperatureCentigrade: response.Main.Kelvin - 273.15,
+		Summary:           response.Weather[0].Main,
+		TemperatureKelvin: response.Main.Kelvin,
 	}, nil
 }

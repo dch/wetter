@@ -22,15 +22,11 @@ func TestGet(t *testing.T) {
 	if !ok {
 		t.Error("error: you need to provide an OpenWeatherMap API token")
 	}
-	c := wetter.NewClient(APIKey)
-	w, err := c.Weather("vienna,AT")
+	w, err := wetter.GetWeather(APIKey, "Vienna,AT", false)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if w.Summary == "" {
-		t.Error("want non-empty summary")
-	}
-	if w.TemperatureCentigrade <= -273.15 {
-		t.Errorf("want temperature greater than absolute zero")
+	if w == "" {
+		t.Error("want non-empty response")
 	}
 }
