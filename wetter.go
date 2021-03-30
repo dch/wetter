@@ -5,27 +5,33 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 )
 
-const OWMAPIBaseURI = "https://api.openweathermap.org"
 
 type client struct {
 	APIKey string
+	BaseURI string
+	HTTPClient *http.Client
 }
 
 func NewClient(APIKey string) *client {
 	return &client{
 		APIKey: APIKey,
+		BaseURI: "https://api.openweathermap.org",
+		HTTPClient: &http.Client{
+			Timeout: 10 * time.Second,
+		},
 	}
 }
 
-func (c *client) GetOwmWeather(owmLocation string) (Conditions, error) {
+func (c *client) GetWeather(location string) (Conditions, error) {
 	owmApiURI := fmt.Sprintf("%s/data/2.5/weather?appid=%s&q=%s",
-		OWMAPIBaseURI,
+		c.BaseURI,
 		c.APIKey,
-		url.QueryEscape(owmLocation))
+		url.QueryEscape(location))
 
-	resp, err := http.Get(owmApiURI)
+	resp, err := c.HTTPClient.Get(owmApiURI)
 	if err != nil {
 		return Conditions{}, fmt.Errorf("error: OpenWeatherMap API call returned an error: %v\n", err)
 	}
@@ -82,7 +88,7 @@ func GetWeather(OWMAPIToken string, OWMLocation string, useFahrenheit bool) (str
 
 func Weather(OWMAPIToken string, OWMLocation string) (Conditions, error) {
 	c := NewClient(OWMAPIToken)
-	conditions, err := c.GetOwmWeather(OWMLocation)
+	conditions, err := c.GetWeather(OWMLocation)
 	if err != nil {
 		return Conditions{}, err
 	}
